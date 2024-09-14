@@ -41,22 +41,25 @@ async function handleCreatePost(req, res) {
 
 async function handleUpdatePost(req,res){
     try {
-        const {title,description,productImages,tags,rent,isRent} = req.body; 
+        const {title,description,category,productImages,tags,rent,isRent,postid} = req.body; 
 
-        if(!title || !description || !productImages || !tags ||!isRent || !rent){
+        if(!title || !description || !category || !productImages || !tags ||!isRent || !rent){
             return res.status(400).json({
                 msg:"invalid request"
             })
         }
-        const result = await Post.update({
-            title,
-            description,
-            productImages,
-            tags,
-            rent,
-            isRent
-        })
 
+        const posts = await Post.find({_id:postid});
+        if(posts){
+            const result = await Post.updateOne({
+                title,
+                description,
+                productImages,
+                tags,
+                rent,
+                isRent
+            })
+        }
         return res.status(200).json({
             msg: "updated post"
         })
